@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  php:
+    image: php:8.1-fpm
+    volumes:
+      - ./php:/var/www/html
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - app-network
+    depends_on:
+      - db
+    restart: always
+    scale: 3
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      - app-network
+    restart: always
+
+  nginx:
+    build: ./nginx 
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "4500:4500"
+    depends_on:
+      - php
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db:
