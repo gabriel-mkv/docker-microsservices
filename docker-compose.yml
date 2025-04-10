@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   php:
-    image: php:8.1-fpm
+    build: ./php
     volumes:
       - ./php:/var/www/html
     environment:
@@ -36,6 +36,7 @@ services:
     container_name: nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./php:/var/www/html
     ports:
       - "4500:4500"
     depends_on:
