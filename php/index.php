@@ -24,23 +24,6 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-// Cria a tabela se ela não existir
-$create_table_sql = "
-CREATE TABLE IF NOT EXISTS dados (
-    AlunoID INT PRIMARY KEY,
-    Nome VARCHAR(100),
-    Sobrenome VARCHAR(100),
-    Endereco VARCHAR(100),
-    Cidade VARCHAR(100),
-    Host VARCHAR(100),
-    CriadoEm TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
-
-if (!$link->query($create_table_sql)) {
-    echo "Erro ao criar a tabela: " . $link->error;
-    exit();
-}
-
 // Gera dados aleatórios
 $valor_rand1 =  rand(1, 999);
 $valor_rand2 = strtoupper(substr(bin2hex(random_bytes(4)), 1));
@@ -52,7 +35,7 @@ $query = "INSERT INTO dados (AlunoID, Nome, Sobrenome, Endereco, Cidade, Host)
 
 // Insere os dados
 if ($link->query($query) === TRUE) {
-  echo "New record created successfully";
+  echo "<h1 style='text-align: center;'>Dados inseridos com sucesso!</h1>";
 } else {
   echo "Error: " . $link->error;
 }
